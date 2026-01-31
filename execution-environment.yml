@@ -1,0 +1,7 @@
+version: 3
+images:
+  base_image:
+    name: docker.io/redhat/ubi9:latest
+dependencies:
+  python: ./requirements/requirements.pip.txt
+  galaxy: ./requirements/requirements.galaxy.yml

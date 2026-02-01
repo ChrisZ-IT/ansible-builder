@@ -1,75 +1,45 @@
 name: Build Ansible Execution Environment
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
   workflow_dispatch:
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # Use the latest Ubuntu runner
+    runs-on: ubuntu-latest
 
     steps:
-    # Checkout the code
     - name: Checkout repository
       uses: actions/checkout@v3
-    
+
+    # - name: Set up Python
+    #   uses: actions/setup-python@v4
+    #   with:
+    #     python-version: '3.x'
+
     - name: Install Ansible Builder
       run: |
         python -m pip install --upgrade pip
         pip install ansible-builder
-        
+
     - name: Set up Docker Buildx
       uses: docker/setup-buildx-action@v3
-        
-    - name: Cache Docker layers
-      uses: actions/cache@v4
+
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v2
       with:
-        path: ~/.cache/docker
-        key: ${{ runner.os }}-docker-${{ hashFiles('**/execution-environment.yml') }}
-        restore-keys: |
-          ${{ runner.os }}-docker-
-          
-    - name: Build Ansible Execution Envinroment
-      run: ansible-builder build --container-runtime docker
-      
-    # # Set up Docker (if not already installed)
-    # - name: Set up Docker Buildx
-    #   uses: docker/setup-buildx-action@v3
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
-    # # Cache Docker layers to speed up builds
-    # - name: Cache Docker layers
-    #   uses: actions/cache@v2
-    #   with:
-    #     path: ~/.cache/docker
-    #     key: ${{ runner.os }}-docker-${{ hashFiles('**/execution-environment.yml') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-docker-
+    - name: Build Ansible Execution Environment
+      run: |
+        IMAGE_NAME=proxmox-ee
+        IMAGE_TAG=${GITHUB_REF_NAME#v}
+        ansible-builder build --container-runtime docker --tag "$DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG"
 
-    # # Build the Docker image
-    # - name: Build Docker image
-    #   run: |
-    #     docker build -t my-ansible-ee -f Dockerfile .
-
-    # # Optionally, login to DockerHub and push the image (if needed)
-    # - name: Log in to Docker Hub
-    #   if: secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD
-    #   uses: docker/login-action@v2
-    #   with:
-    #     username: ${{ secrets.DOCKER_USERNAME }}
-    #     password: ${{ secrets.DOCKER_PASSWORD }}
-
-    # # Optionally, push to Docker Hub (or GitHub Container Registry)
-    # - name: Push Docker image to Docker Hub
-    #   if: secrets.DOCKER_USERNAME && secrets.DOCKER_PASSWORD
-    #   run: |
-    #     docker tag my-ansible-ee ${{ secrets.DOCKER_USERNAME }}/my-ansible-ee:latest
-    #     docker push ${{ secrets.DOCKER_USERNAME }}/my-ansible-ee:latest
-
-    # # Optionally, Push to GitHub Container Registry (GHCR)
-    # - name: Push Docker image to GitHub Container Registry
-    #   if: secrets.GHCR_USERNAME && secrets.GHCR_TOKEN
-    #   run: |
-    #     docker tag my-ansible-ee ghcr.io/${{ github.repository }}/my-ansible-ee:latest
-    #     docker push ghcr.io/${{ github.repository }}/my-ansible-ee:latest
+    - name: Push latest tag
+      run: |
+        IMAGE_NAME=proxmox-ee
+        docker tag "$DOCKER_USER/$IMAGE_NAME:${GITHUB_REF_NAME#v}" "$DOCKER_USER/$IMAGE_NAME:latest"
+        docker push "$DOCKER_USER/$IMAGE_NAME:latest"

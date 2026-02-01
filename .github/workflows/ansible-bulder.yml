@@ -29,12 +29,12 @@ jobs:
     - name: Log in to Docker Hub
       uses: docker/login-action@v2
       with:
-        username: ${{ secrets.DOCKER_USERNAME }}
+        username: ${{ vars.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: Build Ansible Execution Environment
       env:
-        DOCKER_USER=${{ secrets.DOCKER_USERNAME }}
+        DOCKER_USER=${{ vars.DOCKER_USERNAME }}
         IMAGE_NAME=proxmox-ee
       run: |        
         IMAGE_TAG=${GITHUB_REF_NAME#v}
@@ -42,7 +42,7 @@ jobs:
 
     - name: Push image to docker hub tag
       env:
-        DOCKER_USER=${{ secrets.DOCKER_USERNAME }}
+        DOCKER_USER=${{ vars.DOCKER_USERNAME }}
       run: |
         IMAGE_NAME=proxmox-ee
         IMAGE_TAG=${GITHUB_REF_NAME#v}

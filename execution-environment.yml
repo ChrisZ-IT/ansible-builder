@@ -19,6 +19,10 @@ additional_build_steps:
     - ENV PKGMGR=true
     - RUN whoami
     - RUN cat /etc/os-release
+    - RUN dnf install -y python3.12 python3.12-pip
+    - RUN cp /usr/bin/python3.12 /usr/bin/python3
+    - RUN python3 -m pip install --upgrade pip
+    - RUN python3 --version
 
 dependencies:
   ansible_core:
@@ -27,5 +31,7 @@ dependencies:
     package_pip: ansible-runner
   galaxy: files/requirements.yml
   python: files/requirements.txt
-
-    
+  python_interpreter:
+      package_system: "python3"
+      python_path: "/usr/bin/python3.12"
+  

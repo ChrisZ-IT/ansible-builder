@@ -27,7 +27,7 @@ jobs:
         username: ${{ vars.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Ansible Execution Environment image
+    - name: Build and Push Ansible Execution Environment Image
       env:
         DOCKER_USER: ${{ vars.DOCKER_USERNAME }}
         IMAGE_NAME: proxmox-ee

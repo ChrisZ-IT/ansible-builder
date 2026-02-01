@@ -34,15 +34,15 @@ jobs:
 
     - name: Build Ansible Execution Environment
       env:
-        DOCKER_USER=${{ vars.DOCKER_USERNAME }}
-        IMAGE_NAME=proxmox-ee
+        DOCKER_USER: ${{ vars.DOCKER_USERNAME }}
+        IMAGE_NAME: proxmox-ee
       run: |        
         IMAGE_TAG=${GITHUB_REF_NAME#v}
         ansible-builder build --container-runtime docker -t "$DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG"
 
     - name: Push image to docker hub tag
       env:
-        DOCKER_USER=${{ vars.DOCKER_USERNAME }}
+        DOCKER_USER: ${{ vars.DOCKER_USERNAME }}
       run: |
         IMAGE_NAME=proxmox-ee
         IMAGE_TAG=${GITHUB_REF_NAME#v}

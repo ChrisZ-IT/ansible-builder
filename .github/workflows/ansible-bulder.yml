@@ -72,8 +72,4 @@ jobs:
     #   if: secrets.GHCR_USERNAME && secrets.GHCR_TOKEN
     #   run: |
     #     docker tag my-ansible-ee ghcr.io/${{ github.repository }}/my-ansible-ee:latest
-<<<<<<< HEAD
     #     docker push ghcr.io/${{ github.repository }}/my-ansible-ee:latest
-=======
-    #     docker push ghcr.io/${{ github.repository }}/my-ansible-ee:latest
->>>>>>> 36cde97 (testing actions)

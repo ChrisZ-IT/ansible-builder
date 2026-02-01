@@ -39,13 +39,13 @@ jobs:
       run: |        
         IMAGE_TAG=${GITHUB_REF_NAME#v}
         ansible-builder build --container-runtime docker -t "$DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG"
+        docker push "$DOCKER_USER/$IMAGE_NAME:IMAGE_TAG"
 
-    - name: Push image to docker hub tag
+    - name: Push latest image to docker hub
       env:
         DOCKER_USER: ${{ vars.DOCKER_USERNAME }}
-      run: |
-        IMAGE_NAME=proxmox-ee
+        IMAGE_NAME: proxmox-ee
+      run: |        
         IMAGE_TAG=${GITHUB_REF_NAME#v}
         docker tag "$DOCKER_USER/$IMAGE_NAME:${IMAGE_TAG#v}" "$DOCKER_USER/$IMAGE_NAME:latest"
-        docker push "$DOCKER_USER/$IMAGE_NAME:IMAGE_TAG"
         docker push "$DOCKER_USER/$IMAGE_NAME:latest"

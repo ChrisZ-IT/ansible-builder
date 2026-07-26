@@ -32,7 +32,7 @@ jobs:
         DOCKER_USER: ${{ vars.DOCKER_USERNAME }}
         IMAGE_NAME: proxmox-ee
         GIT_REF: ${{ github.ref_name }}
-      run: |        
+      run: |
         IMAGE_TAG="${GIT_REF#v}"
         echo "Pushing: $DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG"
         ansible-builder build --container-runtime docker -t "$DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG"
@@ -40,4 +40,3 @@ jobs:
         echo "Pushing: $DOCKER_USER/$IMAGE_NAME:latest"
         docker tag "$DOCKER_USER/$IMAGE_NAME:$IMAGE_TAG" "$DOCKER_USER/$IMAGE_NAME:latest"
         docker push "$DOCKER_USER/$IMAGE_NAME:latest"
-      

@@ -8,7 +8,7 @@ version: 3
 
 images:
   base_image:
-    name: redhat/ubi10-minimal:10.2
+    name: docker.io/redhat/ubi10-minimal:10.2
 
 options:
   package_manager_path: /usr/bin/microdnf

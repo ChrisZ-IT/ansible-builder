@@ -9,7 +9,7 @@ options:
   package_manager_path: /usr/bin/microdnf
 
 dependencies:
-  system: bindep.txt
+  system: files/bindep.txt
   ansible_core:
     # renovate: datasource=github-tags depName=ansible-runner packageName=ansible/ansible versioning=docker
     package_pip: ansible-core==2.21.2

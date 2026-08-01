@@ -13,21 +13,23 @@ images:
 options:
   package_manager_path: /usr/bin/microdnf
 
-additional_build_files:
-  - src: files/ansible.cfg
-    dest: configs
+# additional_build_files:
+#   - src: files/ansible.cfg
+#     dest: configs
 
-# additional_build_steps:
-#   prepend_base:
-#     - RUN dnf install -y python3.12 python3.12-pip python3.12-devel openssh-clients
-#     - RUN python3 --version
+additional_build_steps:
+  prepend_galaxy:
+    - ENV ANSIBLE_INTERPRETER_PYTHON=auto_silent
+#     - COPY _build/configs/ansible.cfg /etc/ansible/ansible.cfg
 
 dependencies:
   system: files/os-requirements.txt
   ansible_core:
-    package_pip: ansible-core>=2.21.2
+    # renovate: datasource=github-tags depName=ansible-runner packageName=ansible/ansible versioning=docker
+    package_pip: ansible-core==2.21.2
   ansible_runner:
-    package_pip: ansible-runner
+    # renovate: datasource=github-tags depName=ansible-runner packageName=ansible/ansible-runner versioning=docker
+    package_pip: ansible-runner==2.4.3
   galaxy: files/requirements.yml
   python: files/requirements.txt
   python_interpreter:

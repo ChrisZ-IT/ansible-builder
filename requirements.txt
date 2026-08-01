@@ -1,0 +1,7 @@
+ansible
+ansible-core
+ansible-builder
+ansible-runner
+ansible-lint
+requests
+proxmoxer

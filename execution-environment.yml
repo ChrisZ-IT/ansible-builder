@@ -1,11 +1,6 @@
 ---
 version: 3
 
-# requires redhat login
-# images:
-#   base_image:
-#     name: registry.redhat.io/ansible-automation-platform-26/ee-minimal-rhel9:latest
-
 images:
   base_image:
     name: docker.io/redhat/ubi10-minimal:10.2
@@ -13,16 +8,8 @@ images:
 options:
   package_manager_path: /usr/bin/microdnf
 
-additional_build_files:
-  - src: files/ansible.cfg
-    dest: configs
-
-additional_build_steps:
-  prepend_galaxy:
-    - COPY _build/configs/ansible.cfg /etc/ansible/ansible.cfg
-
 dependencies:
-  system: files/os-requirements.txt
+  system: bindep.txt
   ansible_core:
     # renovate: datasource=github-tags depName=ansible-runner packageName=ansible/ansible versioning=docker
     package_pip: ansible-core==2.21.2
@@ -32,5 +19,5 @@ dependencies:
   galaxy: files/requirements.yml
   python: files/requirements.txt
   python_interpreter:
-      package_system: "python3.12 python3.12-pip python3.12-devel"
+      package_system: "python3.12"
       python_path: "/usr/bin/python3.12"

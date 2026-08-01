@@ -13,14 +13,13 @@ images:
 options:
   package_manager_path: /usr/bin/microdnf
 
-# additional_build_files:
-#   - src: files/ansible.cfg
-#     dest: configs
+additional_build_files:
+  - src: files/ansible.cfg
+    dest: configs
 
 additional_build_steps:
   prepend_galaxy:
-    - ENV ANSIBLE_INTERPRETER_PYTHON=auto_silent
-#     - COPY _build/configs/ansible.cfg /etc/ansible/ansible.cfg
+    - COPY _build/configs/ansible.cfg /etc/ansible/ansible.cfg
 
 dependencies:
   system: files/os-requirements.txt
